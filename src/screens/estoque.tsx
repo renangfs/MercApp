@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'; 
+// src/screens/estoque.tsx
+import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal } from 'react-native';
 import styles from '../screens/stylesestoque';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
@@ -61,7 +62,17 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert('Atenção', 'Selecione um produto primeiro');
       return;
     }
-    navigation.navigate('Editar')
+    const selectedProduct = getSelectedProduct();
+    if (selectedProduct) {
+      // ✅ Passa os dados do produto selecionado para a tela Editar
+      navigation.navigate('Editar', {
+        id: selectedProduct.id,
+        nome: selectedProduct.nome,
+        quantidade: selectedProduct.quantidade,
+        preco: selectedProduct.preco,
+        imagem: selectedProduct.imagem,
+      });
+    }
   };
 
   const renderItem = ({ item }: { item: Product }) => {

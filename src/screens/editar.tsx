@@ -1,36 +1,22 @@
-import React, { useState, useEffect } from 'react';
+// src/screens/editar.tsx
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../screens/styleseditar';
 import * as ImagePicker from 'expo-image-picker';
 import * as SQLite from 'expo-sqlite';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 
-const db = SQLite.openDatabaseSync('produtos.db');
+type Props = NativeStackScreenProps<RootStackParamList, 'Editar'>;
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Editar'>;
+const EditProductScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { id, nome: initialNome, quantidade: initialQtd, preco: initialPreco, imagem: initialImagem } = route.params;
 
-const CreateProductScreen = () => {
-  const navigation = useNavigation<NavigationProp>();
-
-  const [imagem, setImagem] = useState<string | null>(null);
-  const [nome, setnome] = useState('');
-  const [qtd, setqtd] = useState('');
-  const [preco, setPrice] = useState('');
-
-  useEffect(() => {
-    db.runSync(`
-      CREATE TABLE IF NOT EXISTS produtos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        quantidade INTEGER,
-        preco REAL,
-        imagem TEXT
-      )
-    `);
-  }, []);
+  const [imagem, setImagem] = useState<string | undefined>(initialImagem);
+  const [nome, setnome] = useState(initialNome);
+  const [qtd, setqtd] = useState(initialQtd.toString());
+  const [preco, setPrice] = useState(initialPreco.toString());
 
   const escolherImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -46,32 +32,23 @@ const CreateProductScreen = () => {
   };
 
   const removerImagem = () => {
-    setImagem(null);
+    setImagem(undefined);
   };
 
-  const cadastrarProduto = () => {
+  const atualizarProduto = async () => {
     if (!nome || !qtd || !preco) {
       Alert.alert("Preencha todos os campos obrigatórios.");
       return;
     }
 
-    db.runSync(
-      "INSERT INTO produtos (nome, quantidade, preco, imagem) VALUES (?, ?, ?, ?)",
-      nome,
-      parseInt(qtd),
-      parseFloat(preco),
-      imagem || ""
+    const db = await SQLite.openDatabaseAsync('produtos.db');
+    await db.runAsync(
+      "UPDATE produtos SET nome = ?, quantidade = ?, preco = ?, imagem = ? WHERE id = ?",
+      [nome, parseInt(qtd), parseFloat(preco), imagem || '', id]
     );
 
-    console.log("Produto cadastrado com sucesso.");
-
-    setnome('');
-    setqtd('');
-    setPrice('');
-    setImagem(null);
-
-    // Redirecionar para a tela de status
-    navigation.navigate('JanelaStatus');
+    Alert.alert("Produto atualizado com sucesso!");
+    navigation.navigate('Estoque');
   };
 
   return (
@@ -103,11 +80,11 @@ const CreateProductScreen = () => {
         </View>
       )}
 
-      <TouchableOpacity style={styles.submitButton} onPress={cadastrarProduto}>
+      <TouchableOpacity style={styles.submitButton} onPress={atualizarProduto}>
         <Text style={styles.submitText}>Salvar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default CreateProductScreen;
+export default EditProductScreen;

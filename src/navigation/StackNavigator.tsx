@@ -14,7 +14,13 @@ export type RootStackParamList = {
   Estoque: undefined;
   Criar: undefined;
   JanelaStatus: undefined;
-  Editar: undefined;
+  Editar: {
+    id: number;
+    nome: string;
+    quantidade: number;
+    preco: number;
+    imagem?: string;
+  }; // ✅ Agora a tela Editar espera os dados do produto
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
