@@ -7,6 +7,7 @@ import Estoque from '../screens/estoque';
 import Criar from '../screens/criar';
 import JanelaStatus from '../screens/janelastatus';
 import Editar from '../screens/editar';
+import ProductListScreen from '../screens/visualizar';
 
 export type RootStackParamList = {
   Index: undefined;
@@ -20,7 +21,8 @@ export type RootStackParamList = {
     quantidade: number;
     preco: number;
     imagem?: string;
-  }; // ✅ Agora a tela Editar espera os dados do produto
+  };
+  Visualizar: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,6 +36,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Criar" component={Criar} options={{ headerShown: false }} />
       <Stack.Screen name="JanelaStatus" component={JanelaStatus} options={{ headerShown: false }} />
       <Stack.Screen name="Editar" component={Editar} options={{ headerShown: false }} />
+      <Stack.Screen name="Visualizar" component={ProductListScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

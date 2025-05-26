@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StatusBar, TouchableOpacity} from 'react-native';
+import { View, Text, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import styles from './stylesindex';
@@ -8,7 +8,6 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Index'>;
 
 export default function Index({ navigation }: Props) {
   return (
-    
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F2F2F2" />
 
@@ -24,20 +23,23 @@ export default function Index({ navigation }: Props) {
       </View>
 
       <View style={styles.buttonContainer}>
-          <View style={{ marginBottom: 16 }}>
-            <TouchableOpacity
-              style={styles.adminButton}
-              onPress={() => navigation.navigate('Login')}
-            >
-              <Text style={styles.buttonText}>Entrar como administrador</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={{ marginBottom: 16 }}>
+          <TouchableOpacity
+            style={styles.adminButton}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={styles.buttonText}>Entrar como administrador</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View>
-            <TouchableOpacity style={styles.userButton}>
-              <Text style={styles.buttonText}>Entrar como morador</Text>
-            </TouchableOpacity>
-          </View>
+        <View>
+          <TouchableOpacity
+            style={styles.userButton}
+            onPress={() => navigation.navigate('Visualizar')}
+          >
+            <Text style={styles.buttonText}>Entrar como morador</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
