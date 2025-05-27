@@ -9,14 +9,22 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
+    marginHorizontal: 30, // aumenta a margem lateral
   },
   itemContainer: {
     flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  imageBox: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
-    marginBottom: 12,
+    width: 100,
+    height: 100,
+    justifyContent: "center",
     alignItems: "center",
+    marginRight: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -26,25 +34,25 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80,
-    marginRight: 12,
     borderRadius: 10,
-    backgroundColor: "#fff",
   },
   textContainer: {
     flex: 1,
+    justifyContent: "center",
   },
   name: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#265a47",
   },
   price: {
     fontSize: 16,
+    fontWeight: "bold",
     color: "#265a47",
     marginTop: 4,
   },
   stock: {
-    fontSize: 14,
+    fontSize: 16,
     marginTop: 4,
   },
   topBar: {
@@ -55,30 +63,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   centerArea: {
-  justifyContent: "flex-end",
-  alignItems: "center",
-},
+    justifyContent: "center",
+    alignItems: "center",
+  },
   searchInput: {
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: "#fff",
     borderRadius: 10,
     paddingHorizontal: 20,
-    height: 50,
+    height: 40,
     fontSize: 18,
     width: width - 70,
   },
   carrolupa: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
   },
   user: {
-    width: 35,
-    height: 35,
+    width: 32,
+    height: 32,
   },
   lupa: {
-    width: 30,
-    height: 30,
+    width: 28,
+    height: 28,
   },
 });
 
