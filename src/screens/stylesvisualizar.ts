@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
-    marginHorizontal: 30, // aumenta a margem lateral
+    marginHorizontal: 15, // aumenta a margem lateral
   },
   itemContainer: {
     flexDirection: "row",

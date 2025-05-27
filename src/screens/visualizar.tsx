@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, FlatList, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import styles from "../screens/stylesvisualizar";
+import * as SQLite from 'expo-sqlite';
 
 interface Product {
-  id: string;
-  name: string;
-  price: string;
-  image: string;
-  available: boolean;
+  id: number;
+  nome: string;
+  preco: number;
+  imagem?: string;
+  quantidade: number;
 }
 
-const products: Product[] = [
-  { id: "1", name: "Água mineral", price: "R$ 00,00", image: "https://i.imgur.com/0rUp8q6.png", available: false },
-  { id: "2", name: "Fanta Laranja", price: "R$ 00,00", image: "https://i.imgur.com/5t1skvG.png", available: true },
-  { id: "3", name: "Arroz integral", price: "R$ 00,00", image: "https://i.imgur.com/q9xh4Y4.png", available: true },
-  { id: "4", name: "Feijão carioca", price: "R$ 00,00", image: "https://i.imgur.com/HnlR6XX.png", available: true },
-  { id: "5", name: "Maçã", price: "R$ 00,00", image: "https://i.imgur.com/6H2Kdx6.png", available: true },
-  { id: "6", name: "Banana nanica", price: "R$ 00,00", image: "https://i.imgur.com/9Btbylw.png", available: true },
-];
-
 const ProductListScreen: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+
+  const loadProducts = async () => {
+    const db = await SQLite.openDatabaseAsync('produtos.db');
+    const result = await db.getAllAsync<Product>('SELECT * FROM produtos');
+    setProducts(result);
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
@@ -29,19 +32,23 @@ const ProductListScreen: React.FC = () => {
   };
 
   const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchText.toLowerCase())
+    product.nome.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const renderItem = ({ item }: { item: Product }) => (
     <View style={styles.itemContainer}>
       <View style={styles.imageBox}>
-        <Image source={{ uri: item.image }} style={styles.image} resizeMode="contain" />
+        {item.imagem ? (
+          <Image source={{ uri: item.imagem }} style={styles.image} resizeMode="contain" />
+        ) : (
+          <View style={[styles.image, { backgroundColor: "#ccc" }]} />
+        )}
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>{item.price}</Text>
-        <Text style={[styles.stock, { color: item.available ? "#999" : "#e74c3c" }]}>
-          {item.available ? "Estoque disponível" : "Estoque indisponível"}
+        <Text style={styles.name}>{item.nome}</Text>
+        <Text style={styles.price}>R$ {item.preco.toFixed(2).replace('.', ',')}</Text>
+        <Text style={[styles.stock, { color: item.quantidade > 0 ? "#93bf83" : "#bf3f3f" }]}>
+          {item.quantidade > 0 ? "Estoque disponível" : "Estoque indisponível"}
         </Text>
       </View>
     </View>
@@ -49,7 +56,7 @@ const ProductListScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
+      <SafeAreaView style={styles.topBar}>
         {searchVisible ? (
           <TextInput
             style={styles.searchInput}
@@ -72,11 +79,11 @@ const ProductListScreen: React.FC = () => {
         <TouchableOpacity onPress={toggleSearch}>
           <Image source={require('../images/search.png')} style={styles.lupa} resizeMode="contain" />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
 
       <FlatList
         data={filteredProducts}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.listContent}
       />
