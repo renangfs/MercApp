@@ -1,16 +1,6 @@
-import React, { useState } from "react"; 
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState } from "react";
+import {View,Text,Image,FlatList,SafeAreaView,TextInput,TouchableOpacity,} from "react-native";
 import styles from "../screens/stylesvisualizar";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Feather from '@expo/vector-icons/Feather';
 
 interface Product {
   id: string;
@@ -102,7 +92,6 @@ const ProductListScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Topbar */}
       <View style={styles.topBar}>
         {searchVisible ? (
           <TextInput
@@ -115,16 +104,14 @@ const ProductListScreen: React.FC = () => {
           />
         ) : (
           <>
-            {/* Ícone da conta */}
             <TouchableOpacity onPress={() => console.log("Conta pressionada")}>
-              <MaterialCommunityIcons 
-                name="account-circle-outline" 
-                size={34} 
-                color="#265a47" 
+              <Image
+                source={require('../images/user.png')}
+                style={styles.user}
+                resizeMode="contain"
               />
             </TouchableOpacity>
 
-            {/* Logo centralizada */}
             <View style={styles.centerArea}>
               <Image
                 source={require('../images/carrolupa.png')}
@@ -134,14 +121,15 @@ const ProductListScreen: React.FC = () => {
             </View>
           </>
         )}
-
-        {/* Lupa funcional */}
         <TouchableOpacity onPress={toggleSearch}>
-          <Feather name="search" size={30} color="#265a47" />
+          <Image
+                source={require('../images/search.png')}
+                style={styles.lupa}
+                resizeMode="contain"
+              />
         </TouchableOpacity>
       </View>
 
-      {/* Lista de produtos */}
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.id}
