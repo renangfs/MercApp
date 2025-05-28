@@ -1,20 +1,16 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import styles from '../screens/styleslogin';
-import { useFocusEffect } from '@react-navigation/native'; // IMPORTANTE
-
+import { useFocusEffect } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 export default function Login({ navigation }: Props) {
-
-  // Variáveis para armazenar login e senha
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
-  // Limpa campos ao voltar para a tela
   useFocusEffect(
     useCallback(() => {
       setLogin('');
@@ -22,39 +18,35 @@ export default function Login({ navigation }: Props) {
     }, [])
   );
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Index');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [navigation]);
+
   const verificarSenha = () => {
-  
-  // Função para mostrar os dados no console
-  console.log('Login:', login);
-  console.log('Senha:', senha);
+    const loginTrim = login.trim();
+    const senhaTrim = senha.trim();
 
-  // Trim tira espaços extras, por segurança
-  const loginTrim = login.trim();
-  const senhaTrim = senha.trim();
+    if (loginTrim === 'a' && senhaTrim === '1') {
+      navigation.navigate('Estoque');
+      return;
+    }
+    if (loginTrim !== 'adm') {
+      Alert.alert('Erro no login', 'Login incorreto.');
+      return;
+    }
+    Alert.alert('Erro na senha', 'Senha incorreta.');
+  };
 
-  // Verifica se os dois estão corretos
-  if (loginTrim === 'a' && senhaTrim === '1') {
-    //ir para outra pagina
-    navigation.navigate('Estoque')
-    return;
-  }
-  // Verifica se o login está errado
-  if (loginTrim !== 'adm') {
-    Alert.alert('Erro no login', 'Login incorreto.');
-    return;
-  }
-  // Se login tá certo mas senha errada
-  Alert.alert('Erro na senha', 'Senha incorreta.');
-  
-};
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image
-          source={require('../images/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <Image source={require('../images/logo.png')} style={styles.logo} resizeMode="contain" />
       </View>
       <Text style={styles.subtitle}>Acesse sua conta</Text>
 
@@ -84,7 +76,6 @@ export default function Login({ navigation }: Props) {
       <TouchableOpacity style={styles.button} onPress={verificarSenha}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
-
 
       <TouchableOpacity>
         <Text style={styles.register}>Cadastrar administrador</Text>

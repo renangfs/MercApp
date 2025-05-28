@@ -54,41 +54,42 @@ const ProductListScreen: React.FC = () => {
     </View>
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.topBar}>
-        {searchVisible ? (
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Pesquisar produto..."
-            placeholderTextColor="#999"
-            value={searchText}
-            onChangeText={setSearchText}
-            autoFocus
-          />
-        ) : (
-          <>
-            <TouchableOpacity onPress={() => console.log("Conta pressionada")}>
-              <Image source={require('../images/user.png')} style={styles.user} resizeMode="contain" />
-            </TouchableOpacity>
-            <View style={styles.centerArea}>
-              <Image source={require('../images/carrolupa.png')} style={styles.carrolupa} resizeMode="contain" />
-            </View>
-          </>
-        )}
-        <TouchableOpacity onPress={toggleSearch}>
-          <Image source={require('../images/search.png')} style={styles.lupa} resizeMode="contain" />
-        </TouchableOpacity>
-      </SafeAreaView>
+return (
+  <SafeAreaView style={styles.container}>
+    <View style={styles.topBar}>
+      {searchVisible ? (
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Pesquisar produto..."
+          placeholderTextColor="#999"
+          value={searchText}
+          onChangeText={setSearchText}
+          autoFocus
+        />
+      ) : (
+        <>
+          <TouchableOpacity onPress={() => console.log("Conta pressionada")}>
+            <Image source={require('../images/user.png')} style={styles.user} resizeMode="contain" />
+          </TouchableOpacity>
+          <View style={styles.centerArea}>
+            <Image source={require('../images/carrolupa.png')} style={styles.carrolupa} resizeMode="contain" />
+          </View>
+        </>
+      )}
+      <TouchableOpacity onPress={toggleSearch}>
+        <Image source={require('../images/search.png')} style={styles.lupa} resizeMode="contain" />
+      </TouchableOpacity>
+    </View>
 
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
-      />
-    </SafeAreaView>
-  );
+    <FlatList
+      data={filteredProducts}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderItem}
+      contentContainerStyle={styles.listContent}
+    />
+  </SafeAreaView>
+);
+
 };
 
 export default ProductListScreen;

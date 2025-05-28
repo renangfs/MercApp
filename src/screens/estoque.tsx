@@ -1,6 +1,5 @@
-// src/screens/estoque.tsx
-import React, { useState, useCallback } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, BackHandler } from 'react-native';
 import styles from '../screens/stylesestoque';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -37,6 +36,15 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
     }, [])
   );
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Login');
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [navigation]);
+
   const handleSelect = (id: number) => {
     setSelectedProductId(id === selectedProductId ? null : id);
   };
@@ -64,7 +72,6 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
     }
     const selectedProduct = getSelectedProduct();
     if (selectedProduct) {
-      // ✅ Passa os dados do produto selecionado para a tela Editar
       navigation.navigate('Editar', {
         id: selectedProduct.id,
         nome: selectedProduct.nome,
@@ -131,17 +138,8 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
           ]}
           onPress={handleDelete}
         >
-          <MaterialIcons
-            name="close"
-            size={18}
-            color={isProductSelected ? 'red' : '#ccc'}
-          />
-          <Text
-            style={[
-              styles.deleteButtonText,
-              isProductSelected && { color: 'black' },
-            ]}
-          >
+          <MaterialIcons name="close" size={18} color={isProductSelected ? 'red' : '#ccc'} />
+          <Text style={[styles.deleteButtonText, isProductSelected && { color: 'black' }]}>
             Excluir produto
           </Text>
         </TouchableOpacity>
@@ -153,23 +151,11 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <TouchableOpacity
-        style={[
-          styles.editButton,
-          isProductSelected && { backgroundColor: '#e6e6e6' },
-        ]}
+        style={[styles.editButton, isProductSelected && { backgroundColor: '#e6e6e6' }]}
         onPress={handleEdit}
       >
-        <Feather
-          name="edit-2"
-          size={16}
-          color={isProductSelected ? '#4c4c4c' : '#ccc'}
-        />
-        <Text
-          style={[
-            styles.editButtonText,
-            isProductSelected && { color: 'black' },
-          ]}
-        >
+        <Feather name="edit-2" size={16} color={isProductSelected ? '#4c4c4c' : '#ccc'} />
+        <Text style={[styles.editButtonText, isProductSelected && { color: 'black' }]}>
           Editar produto
         </Text>
       </TouchableOpacity>
@@ -200,13 +186,8 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </View>
 
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-      />
+      <FlatList data={products} keyExtractor={(item) => item.id.toString()} renderItem={renderItem} />
 
-      {/* Modal de confirmação */}
       <Modal transparent={true} visible={showConfirmModal} animationType="fade">
         <View
           style={{
