@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal, BackHandler } from 'react-native';
 import styles from '../screens/stylesestoque';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
@@ -22,9 +22,17 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  const dbRef = useRef<SQLite.SQLiteDatabase | null>(null);
+
+  const openDb = async () => {
+    if (!dbRef.current) {
+      dbRef.current = await SQLite.openDatabaseAsync('produtos.db');
+    }
+  };
+
   const loadProducts = async () => {
-    const db = await SQLite.openDatabaseAsync('produtos.db');
-    const result = await db.getAllAsync<Product>('SELECT * FROM produtos');
+    await openDb();
+    const result = await dbRef.current!.getAllAsync<Product>('SELECT * FROM produtos');
     setProducts(result);
   };
 
@@ -58,8 +66,8 @@ const InventoryScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const confirmDelete = async () => {
-    const db = await SQLite.openDatabaseAsync('produtos.db');
-    await db.runAsync('DELETE FROM produtos WHERE id = ?', [selectedProductId]);
+    await openDb();
+    await dbRef.current!.runAsync('DELETE FROM produtos WHERE id = ?', [selectedProductId]);
     setShowConfirmModal(false);
     setSelectedProductId(null);
     loadProducts();

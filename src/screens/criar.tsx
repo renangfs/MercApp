@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../screens/stylescriar';
 import * as ImagePicker from 'expo-image-picker';
 import * as SQLite from 'expo-sqlite';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 
@@ -31,6 +31,19 @@ const CreateProductScreen = () => {
       )
     `);
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const backAction = () => {
+        navigation.navigate('Estoque');
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => backHandler.remove();
+    }, [navigation])
+  );
 
   const escolherImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({

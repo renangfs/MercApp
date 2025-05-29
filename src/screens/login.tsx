@@ -32,7 +32,7 @@ export default function Login({ navigation }: Props) {
     const loginTrim = login.trim();
     const senhaTrim = senha.trim();
 
-    if (loginTrim === 'a' && senhaTrim === '1') {
+    if (loginTrim === '' && senhaTrim === '') {
       navigation.navigate('Estoque');
       return;
     }

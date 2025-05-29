@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Nave",
+    "name": "NOVO",
     "slug": "Nave",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,13 +20,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.renangfs77.Nave"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "../assets/favicon.png"
     },
     "plugins": [
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6ce14f4e-3eb6-4bfa-8705-1207070cc4c7"
+      }
+    }
   }
 }

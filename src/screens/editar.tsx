@@ -1,6 +1,6 @@
 // src/screens/editar.tsx
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../screens/styleseditar';
 import * as ImagePicker from 'expo-image-picker';
@@ -17,6 +17,17 @@ const EditProductScreen: React.FC<Props> = ({ route, navigation }) => {
   const [nome, setnome] = useState(initialNome);
   const [qtd, setqtd] = useState(initialQtd.toString());
   const [preco, setPrice] = useState(initialPreco.toString());
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Estoque');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, [navigation]);
 
   const escolherImagem = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
