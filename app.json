@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NOVO",
-    "slug": "Nave",
+    "name": "MercApp",
+    "slug": "MercApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,7 +31,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "6ce14f4e-3eb6-4bfa-8705-1207070cc4c7"
+        "projectId": "a73a9a7b-9a74-4be4-9010-6dacd8847308"
       }
     }
   }
